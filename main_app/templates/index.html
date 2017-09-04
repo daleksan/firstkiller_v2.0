@@ -1,0 +1,33 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'bootstrap/dist/js/bootstrap.min.js' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'style.css' %}" rel="stylesheet" media="screen">
+    <title>Первокиллер v2.0</title>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Первокиллер v2.0</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Новости</a></li>
+      <li><a href="#">Правила</a></li>
+      <li><a href="#">Номинации</a></li>
+      <li><a href="#">Статистика</a></li>
+    </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Регистрация</a></li>
+        <li><a href="log-in"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+      </ul>
+  </div>
+</nav>
+</body>
+</html>
