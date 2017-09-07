@@ -19,6 +19,6 @@ from main_app import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', views.index)
-
+    url(r'^user/(\w+)/$', views.profile, name='profile'),
+    url(r'^$', views.index),
 ]
