@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+  
+{% block content %}
+<!-- Navigation -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <a class="navbar-brand" href="/"><img src="{% static 'images/favicon.png' %}">Первокиллер</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav comp-nav">
+        <li><a href="/rules">Правила</a></li>
+        <li class="active"><a href="/nominations">Номинации</a></li> 
+        <li><a href="/statistics">Статистика</a></li> 
+      </ul>
+      <ul class="nav navbar-nav comp-nav1 navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Регистрация</a></li>
+        <li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Content -->
+<div class="panel-group">
+  <div class="panel panel-primary">
+    <div class="panel-heading">Список номинаций на игру. До начала игры он может дополняться и изменяться.</div>
+    <div class="panel-body"><ol>
+  <li>Маньяк <i>(первое место по числу убийств)</i></li>
+  <li>Заместитель маньяка <i>(второе место по числу убийств)</i></li>
+  <li>Ученик манька <i>(третье место по числу убийств)</i></li>
+  <li>Живчик <i>(выживший и убивший максимальное число человек)</i></li>
+  <li>Первая кровь <i>(первый убивший)</i></li>
+  <li>Лучшая фотография с игры <i>(прикреплять с подписями на <a href="/news">страницу комментариев</a>)</i></li>
+  <li>Лучшее видео убийства <i>(прикреплять с подписями на <a href="/news">страницу комментариев</a>)</i></li>
+</ol>
+</div>
+  </div>
+<hr>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'style.css' %}" rel="stylesheet" media="screen">
+    <title>Первокиллер v2.0</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/png">
+</head>
+<body>
+<div class="bg"></div>
+
+
+<main class="container container--mw700">
+  {% block content %}
+  {% endblock %}
+</main>
+<script data-pace-options='{ "ajax": false }' src="{% static 'pace.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
