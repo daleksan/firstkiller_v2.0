@@ -14,7 +14,11 @@ label {
 @media (min-width: 992px) and (max-width: 1199px) {
 
     body {
-        background-image: none;
+        background: url('images/4_3.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
     }
 
 }
@@ -23,7 +27,11 @@ label {
 @media (min-width: 768px) and (max-width: 991px) {
 
     body {
-        background-image: none;
+        background: url('images/3_4.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
     }
 
 }
@@ -32,7 +40,11 @@ label {
 @media (max-width: 767px) {
 
     body {
-        background-image: none;
+        background: url('images/16_9.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
     }
 
 }
@@ -41,7 +53,11 @@ label {
 @media (max-width: 480px) {
 
     body {
-        background-image: none;
+        background: url('images/9_16.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
     }
 
 }
