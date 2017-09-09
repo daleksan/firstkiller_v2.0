@@ -30,8 +30,11 @@
     </div>
   </div>
 </nav>
+{% if error_message %}
+  <div id="alert-failed" class="alert alert-danger alert-dismissable fade in"><span class="glyphicon glyphicon-exclamation-sign"></span> {{ error_message }}</div>
+{% endif %}
 <div class="well">
-<form action="." method="post">
+<form method="post">
   {% csrf_token %}
   <div class="form-group">
     <label for="{{ form.u.id_for_label }}">Имя пользователя:</label>
@@ -41,7 +44,8 @@
     <label for="{{ form.p.id_for_label }}">Пароль:</label>
     <input type="password" class="form-control" id="{{ form.p.id_for_label }}" name="password">
   </div>
-  <button type="submit" class="btn btn-outline-primary">Войти</button>
+  <button type="submit" class="btn btn-primary">Войти</button>
+  <span id="registration-label" class="label label-primary registration-label"><a href="{% url 'registration' %}"> Регистрация</a></span>
 </form>
 </div>
 {% endblock %}

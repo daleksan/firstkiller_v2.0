@@ -7,7 +7,7 @@ body {
 }
 label {
     color: white;
-    font-size: 15pt;
+    font-size: 13pt;
 }
 
 /* Landscape tablets and medium desktops */
@@ -60,6 +60,15 @@ label {
         -o-background-size: cover;
     }
 
+}
+
+.label-primary {
+  background-color: white;
+  font-size: 13px;
+}
+.label-primary[href]:hover,
+.label-primary[href]:focus {
+  background-color: #286090;
 }
 
 .well {
