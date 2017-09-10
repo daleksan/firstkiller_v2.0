@@ -10,4 +10,8 @@ urlpatterns = [
     url(r'^nominations/$', views.nominations, name='nominations'),
     url(r'^statistics/$', views.statistics, name='statistics'),
     url(r'^registration/$', views.registration, name='registration'),
+    url(r'^profile/createGame/$', views.createGame, name='createGame'),
+    url(r'^manage/(\w+)/$', views.manageGame, name='manageGame'),
+    url(r'^startRegistration/$', views.startRegistration, name='startRegistration'),
+    url(r'^registerOnGame/(\w+)/$', views.registerOnGame, name='registerOnGame'),
 ]

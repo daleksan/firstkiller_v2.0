@@ -21,6 +21,10 @@
       </ul>
       <ul class="nav navbar-nav comp-nav1 navbar-right">
         {% if user.is_authenticated %}
+        {% if user.is_staff %}
+        <li><a href="/admin"><span class="glyphicon glyphicon glyphicon-wrench"></span> База данных</a></li>
+        {% endif %}
+        <li><a href="#">Уведомления <span class="badge">0</span></a></li>
         <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span>{{ user.username }}</a></li>
         <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
         {% else %}
@@ -47,5 +51,11 @@
 </div>
   </div>
 <hr>
+</div>
+<div class="well content">
+<footer class="container-fluid text-center">
+  <p>Copyright © 2017 by <a href="https://vk.com/id13795993">Dmitry Aleksandrov.</a></p>
+  <p>All Rights Reserved.</p>
+</footer>
 </div>
 {% endblock %}

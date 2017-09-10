@@ -39,18 +39,18 @@
 <div class="well">
 <div class="container-fluid text-center">    
   <div class="row content column-parent">
-  <!-- Left column -->
+<!-- Left column -->
     <div class="col-sm-3 sidenav">
     <div class="well column content">
       <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="#">Профиль</a></li>
-        <li class="dropdown">
+        <li><a href="{% url 'profile' %}">Профиль</a></li>
+        <!-- <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Статистика за игры
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">Первокиллер 2017</a></li>
           </ul>
-        </li>
+        </li> -->
         <!-- Register On Game -->
         {% for game in games %}
         {% if game.get_game_status == 'Идет Регистрация' %}
@@ -63,7 +63,7 @@
         {% if user.is_staff %}
         <li><a href="{% url 'createGame' %}">Создать Игру</a></li>
         {% if games %}
-        <li class="dropdown">
+        <li class="active dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Управление играми
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -81,15 +81,29 @@
     </div>
     <!-- end of left column -->
     <!-- center -->
-    <div class="col-sm-6 text-left"> 
+    <div class="col-sm-6 text-left">
+    {% if error_message %}
+      <div id="alert-failed" class="alert alert-danger alert-dismissable fade in"><span class="glyphicon glyphicon-exclamation-sign"></span> {{ error_message }}</div>
+    {% endif %}
     <div class="well column content">
-      <div class="page-header">
-        <h3>Добро пожаловать, Киллер!</h3>
-      </div>
-      <h4>Регистрация открыта. </h4>
-      <div align="center"><img src="{% static 'images/afisha.jpg' %}" class="img-rounded" width="80%" height="80%"></div>
-      <hr>
-      <p>Удачи на игре!</p>
+      <h3>{{ game.get_game_name }}</h3>
+      <table class="table">
+      <thead>
+      <tr>
+        <th>Дата начала</th>
+        <th>Дата завершения</th>
+        <th>Количество участников</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>{{ current_game.get_game_start_date }}</td>
+        <td>{{ current_game.get_game_end_date }}</td>
+        <td>{{ current_game.get_game_killers }}</td>
+      </tr>
+      </tbody>
+      </table>
+      <button id ="button_startGame" data-id="{{ current_game.id }}" class="btn btn-primary" type="button_startGame">Начать игру</button>
     </div>
     </div>
     <!-- end of center -->
