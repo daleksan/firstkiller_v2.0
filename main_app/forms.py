@@ -61,6 +61,14 @@ class CreateGameForm(forms.ModelForm):
       fields = ('game_name',)
 
 class RegisterOnGameForm(forms.ModelForm):
+    group_number = forms.CharField(label=u'Номер группы',
+                                   max_length=15,
+                                   required=True,
+                                   help_text='Номер вашей группы.',
+                                   widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                 'placeholder': u'Введите номер группы ("-" для преподавателей)'}))
+    photo = forms.ImageField(label = u'Фотография',
+                             required=True)
     class Meta:
         model = Participants
         fields = ('group_number', 'photo',)

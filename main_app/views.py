@@ -18,11 +18,13 @@ def index(request):
 
 
 def profile(request):
-    current_user = request.user
+    current_user = User.objects.get(username = request.user)
     games = Game.objects.all()
+    killer = Participants.objects.filter(user = current_user)
     return render(request, 'profile.html',
                   {'current_user': current_user,
-                   'games': games})
+                   'games': games,
+                   'killer': killer})
 
 
 def rules(request):
@@ -34,7 +36,8 @@ def nominations(request):
 
 
 def statistics(request):
-    return render(request, 'statistics.html')
+    killers = Participants.objects.all()
+    return render(request, 'statistics.html', {'killers': killers})
 
 
 def registration(request):
@@ -118,27 +121,18 @@ def registerOnGame(request, game_id):
     gameid = Game.objects.get(pk=game_id)
     games = Game.objects.all()
     killer = User.objects.get(username=request.user)
-    print killer.first_name
-    KillerFormSet = inlineformset_factory(Game,
-                                          Participants,
-                                          fields=('group_number', 'photo',),
-                                          extra=1,
-                                          can_delete=False,
-                                          labels={'group_number': u'Номер группы',
-                                                  'photo': u'Фотография'},
-                                          widgets={'group_number': TextInput(attrs={'class': 'form-control',
-                                                                 'placeholder': u'Введите номер группы ("-" для преподавателей)'})})
-    if request.method == 'POST':
-        formset = KillerFormSet(request.POST, request.FILES, instance=gameid)
-        if formset.is_valid():
-            participant = formset.save(commit = False)
-            participant.user = request.user
+    if request.method == "POST":
+        form = RegisterOnGameForm(data = request.POST, files = request.FILES)
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            participant = form.save(commit = False)
+            participant.user = killer
+            participant.participants = gameid
             participant.first_name = killer.first_name
             participant.last_name = killer.last_name
             participant.save()
             return HttpResponseRedirect('/profile/')
     else:
-        formset = KillerFormSet(instance=gameid)
-    return render(request, 'profile-register-on-game.html', {'form': formset,
+        form  = RegisterOnGameForm()
+    return render(request, 'profile-register-on-game.html', {'form': form,
                                                              'games': games})
-# Create your views here.

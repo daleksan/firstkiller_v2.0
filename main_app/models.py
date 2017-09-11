@@ -102,10 +102,8 @@ class Game(models.Model):
     def get_game_killers(self):
         return self.killers
 
-
-
 class Participants(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True)
+    user = models.OneToOneField(User, null=True, blank=True)
     participants = models.ForeignKey(Game, related_name="participants", on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=30, blank=False)
@@ -115,4 +113,20 @@ class Participants(models.Model):
     personal_code = models.CharField(default=generate_code, blank=False, max_length=6, unique=True)
     victim_code = models.CharField(default=None, blank=True, null=True, max_length=6)
     kills = models.IntegerField(default=0)
+
+    def get_game_name(self):
+        return self.participants.game_name
+
+    def get_user_info(self):
+        '''
+        Returns the first_name plus the last_name, with a space in between.
+        '''
+        user_info = '%s %s (%s)' % (self.first_name, self.last_name, self.group_number)
+        return user_info.strip()
+
+    def get_status(self):
+        return self.status
+
+    def get_kills(self):
+        return self.kills
 
