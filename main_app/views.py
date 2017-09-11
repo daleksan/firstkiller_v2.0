@@ -85,6 +85,7 @@ def logout_view(request):
 def createGame(request):
     error_message = None
     games = Game.objects.all()
+    killer = Participants.objects.filter(user = current_user)
     if request.method == 'POST':
         form = CreateGameForm(data = request.POST)
         if form.is_valid():
@@ -98,14 +99,17 @@ def createGame(request):
         form = CreateGameForm()
     return render(request, 'profile-create-game.html', {'form': form,
                                                         'error_message': error_message,
-                                                        'games': games})
+                                                        'games': games,
+                                                        'killer': killer})
 
 def manageGame(request, game_id):
     # game_name = get_object_or_404(Game.objects, game_name=game_name)
     current_game = Game.objects.get(id=game_id)
     games = Game.objects.all()
+    killer = Participants.objects.filter(user = current_user)
     return render(request, 'profile-manage-game.html', {'games': games,
-                                                        'current_game': current_game})
+                                                        'current_game': current_game,
+                                                        'killer': killer})
 
 def startRegistration(request):
     game_id = request.POST.get('game_id', None)

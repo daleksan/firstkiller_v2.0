@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from random import randint
+import os
 
 from .managers import UserManager
 from .constants import KILLER_STATUS_CHOICES, ALIVE, DEAD, \
@@ -102,13 +103,18 @@ class Game(models.Model):
     def get_game_killers(self):
         return self.killers
 
+def get_file_name(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.personal_code, ext)
+    return os.path.join('game/', filename)
+
 class Participants(models.Model):
     user = models.OneToOneField(User, null=True, blank=True)
     participants = models.ForeignKey(Game, related_name="participants", on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=30, blank=False)
     group_number = models.CharField(max_length=30, blank=False)
-    photo = models.ImageField(upload_to="game/")
+    photo = models.ImageField(upload_to=get_file_name)
     status = models.CharField(choices=KILLER_STATUS_CHOICES, max_length=5, default=ALIVE)
     personal_code = models.CharField(default=generate_code, blank=False, max_length=6, unique=True)
     victim_code = models.CharField(default=None, blank=True, null=True, max_length=6)

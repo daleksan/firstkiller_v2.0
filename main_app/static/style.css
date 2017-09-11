@@ -269,6 +269,10 @@ ul.profile-details li div.body {
   display: block;
 }
 
-.table-striped td{
+/*.table-striped td{
   color: rgba(8, 8, 8, 0.8)
+}*/
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+   background-color: rgba(8, 8, 8, 0.8);
 }

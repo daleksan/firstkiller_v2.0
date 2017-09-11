@@ -56,7 +56,7 @@
         <!-- Register On Game -->
         {% for game in games %}
         {% if game.get_game_status == 'Идет Регистрация' %}
-        <li {% if killer %} class="disabled" {% endif %}><a href="{% url 'registerOnGame' game.id %}">Регистрация на игру</a></li>
+        <li {% if killer %} class="disabled" {% endif %}><a {% if not killer %} href="{% url 'registerOnGame' game.id %}" {% endif %}>Регистрация на игру</a></li>
         {% endif %}
         {% endfor %}
         <!-- end of register on game -->

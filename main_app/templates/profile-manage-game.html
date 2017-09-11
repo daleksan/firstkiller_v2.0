@@ -24,7 +24,7 @@
         {% if user.is_staff %}
         <li><a href="/admin"><span class="glyphicon glyphicon glyphicon-wrench"></span> База данных</a></li>
         {% endif %}
-        <li><a data-toggle="modal" data-target="#myModal">Уведомления <span class="badge">0</span></a></li>
+        <li><a data-toggle="modal" data-target="#myModal" class="notifications">Уведомления <span class="badge">0</span></a></li>
         <li class="active"><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span>{{ user.username }}</a></li>
         <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
         {% else %}
@@ -56,7 +56,7 @@
         <!-- Register On Game -->
         {% for game in games %}
         {% if game.get_game_status == 'Идет Регистрация' %}
-        <li><a href="{% url 'registerOnGame' game.id %}">Регистрация на игру</a></li>
+        <li {% if killer %} class="disabled" {% endif %}><a {% if not killer %} href="{% url 'registerOnGame' game.id %}" {% endif %}>Регистрация на игру</a></li>
         {% endif %}
         {% endfor %}
         <!-- end of register on game -->

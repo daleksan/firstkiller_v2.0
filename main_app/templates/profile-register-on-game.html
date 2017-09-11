@@ -56,7 +56,7 @@
         <!-- Register On Game -->
         {% for game in games %}
         {% if game.get_game_status == 'Идет Регистрация' %}
-        <li class="active"><a href="{% url 'registerOnGame' game.id %}">Регистрация на игру</a></li>
+        <li {% if killer %} class="disabled" {% else %} class="active" {% endif %}><a {% if not killer %} href="{% url 'registerOnGame' game.id %}" {% endif %}>Регистрация на игру</a></li>
         {% endif %}
         {% endfor %}
         <!-- end of register on game -->
@@ -70,7 +70,7 @@
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {% for game in games %}
-            <li class="active"><a href="{% url 'manageGame' game.id %}">{{ game.get_game_name }}</a></li>
+            <li><a href="{% url 'manageGame' game.id %}">{{ game.get_game_name }}</a></li>
             {% endfor %}
           </ul>
         </li>
