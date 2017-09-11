@@ -5,14 +5,22 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import User
+from .models import User, Game, Participants
 
 
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    username = forms.CharField(label=u'Имя пользователя',
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'placeholder': u'Введите логин'}),
+                               max_length=64)
+    password1 = forms.CharField(label=u'Пароль',
+                                widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                  'placeholder': u'Введите ваш пароль'}))
+    password2 = forms.CharField(label=u'Пароль (подтверждение)',
+                                widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                  'placeholder': u'Введите ваш пароль еще раз для подтверждения'}))
 
     class Meta:
         model = User
@@ -23,7 +31,7 @@ class UserCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError("Пароли не совпадают")
         return password2
 
     def save(self, commit=True):
@@ -79,6 +87,15 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username',)
     ordering = ('username',)
     filter_horizontal = ()
+
+class ParticipantsInline(admin.TabularInline):
+    model = Participants
+    extra = 0
+
+@admin.register(Game)
+class GameAdmin(admin.ModelAdmin):
+    list_display = ('game_name', 'start_date', 'end_date', 'killers', 'status')
+    inlines = [ParticipantsInline]
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)

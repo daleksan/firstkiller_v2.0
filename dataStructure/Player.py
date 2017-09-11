@@ -1,4 +1,4 @@
-class Player:
+class Player(object):
     def __init__(self, id, name="Unknown"):
         self.id = id
         self.name = name
