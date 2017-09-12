@@ -1,46 +1,51 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.forms import TextInput, FileInput
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-from django.forms.models import inlineformset_factory
+from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from datetime import date
+
 
 from .forms import LoginForm, RegistrationForm, CreateGameForm, RegisterOnGameForm
 
 from .models import Game, User, Participants
 
 
-def index(request):
+def indexView(request):
     return render(request, 'index.html')
 
 
-def profile(request):
-    current_user = User.objects.get(username = request.user)
+def profileView(request):
+    current_user = User.objects.get(username=request.user)
+    currentUrl = request.get_full_path()
     games = Game.objects.all()
-    killer = Participants.objects.filter(user = current_user)
-    return render(request, 'profile.html',
-                  {'current_user': current_user,
-                   'games': games,
-                   'killer': killer})
+    killer = Participants.objects.filter(user=current_user)
+    print currentUrl
+    if killer:
+        print 123
+    return render(request, 'profile.html', locals())
 
 
-def rules(request):
-    return render(request, 'rules.html')
+def rulesView(request):
+    currentUrl = request.get_full_path()
+    return render(request, 'rules.html', locals())
 
 
-def nominations(request):
-    return render(request, 'nominations.html')
+def nominationsView(request):
+    currentUrl = request.get_full_path()
+    return render(request, 'nominations.html', locals())
 
 
-def statistics(request):
+def statisticsView(request):
     killers = Participants.objects.all()
-    return render(request, 'statistics.html', {'killers': killers})
+    currentUrl = request.get_full_path()
+    return render(request, 'statistics.html', locals())
 
 
-def registration(request):
+def registrationView(request):
+    currentUrl = request.get_full_path()
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -52,11 +57,12 @@ def registration(request):
             return HttpResponseRedirect('/profile/')
     else:
         form = RegistrationForm()
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration.html', locals())
 
 
-def login_view(request):
+def loginView(request):
     error_message = None
+    currentUrl = request.get_full_path()
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -75,21 +81,23 @@ def login_view(request):
         return HttpResponseRedirect('profile/')
     else:
         form = LoginForm()
-    return render(request, 'index.html', {'form': form, 'error_message': error_message})
+    return render(request, 'index.html', locals())
 
 
-def logout_view(request):
+def logoutView(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-def createGame(request):
+
+def createGameView(request):
     error_message = None
+    currentUrl = request.get_full_path()
     games = Game.objects.all()
-    killer = Participants.objects.filter(user = current_user)
+    killer = Participants.objects.filter(user=request.user)
     if request.method == 'POST':
-        form = CreateGameForm(data = request.POST)
+        form = CreateGameForm(data=request.POST)
         if form.is_valid():
-            game = form.save(commit = False)
+            game = form.save(commit=False)
             try:
                 game.save()
                 return HttpResponseRedirect('/profile/')
@@ -97,21 +105,18 @@ def createGame(request):
                 error_message = 'Ошибка при создании игры'
     else:
         form = CreateGameForm()
-    return render(request, 'profile-create-game.html', {'form': form,
-                                                        'error_message': error_message,
-                                                        'games': games,
-                                                        'killer': killer})
+    return render(request, 'profile-create-game.html', locals())
 
-def manageGame(request, game_id):
+
+def manageGameView(request, game_id):
     # game_name = get_object_or_404(Game.objects, game_name=game_name)
     current_game = Game.objects.get(id=game_id)
     games = Game.objects.all()
-    killer = Participants.objects.filter(user = current_user)
-    return render(request, 'profile-manage-game.html', {'games': games,
-                                                        'current_game': current_game,
-                                                        'killer': killer})
+    killer = Participants.objects.filter(user=request.user)
+    return render(request, 'profile-manage-game.html', locals())
 
-def startRegistration(request):
+
+def startRegistrationRequest(request):
     game_id = request.POST.get('game_id', None)
     if (game_id):
         game = Game.objects.get(id=game_id)
@@ -121,22 +126,25 @@ def startRegistration(request):
         return HttpResponse(date.today())
 
 
-def registerOnGame(request, game_id):
+def registerOnGameView(request, game_id):
+    currentUrl = request.get_full_path()
+    currentUser = User.objects.get(username=request.user)
     gameid = Game.objects.get(pk=game_id)
     games = Game.objects.all()
-    killer = User.objects.get(username=request.user)
+    killer = Participants.objects.filter(user=request.user)
+    print currentUrl
     if request.method == "POST":
-        form = RegisterOnGameForm(data = request.POST, files = request.FILES)
+        form = RegisterOnGameForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            participant = form.save(commit = False)
-            participant.user = killer
+            participant = form.save(commit=False)
+            participant.user = currentUser
             participant.participants = gameid
-            participant.first_name = killer.first_name
-            participant.last_name = killer.last_name
+            participant.first_name = currentUser.first_name
+            participant.last_name = currentUser.last_name
             participant.save()
+            messages.success(request, 'Вы успешно зарегистрировались на игру!')
             return HttpResponseRedirect('/profile/')
     else:
-        form  = RegisterOnGameForm()
-    return render(request, 'profile-register-on-game.html', {'form': form,
-                                                             'games': games})
+        form = RegisterOnGameForm()
+    return render(request, 'profile-register-on-game.html', locals())

@@ -13,12 +13,59 @@
 </head>
 <body>
 <div class="bg"></div>
-
+{% url 'profile' as profileURL %}
+{% url 'rules' as rulesURL %}
+{% url 'nominations' as nominationsURL %}
+{% url 'statistics' as statisticsURL %}
+{% url 'logout' as logoutURL %}
+{% url 'login' as loginURL %}
+{% url 'manageGame' game.id as manageGameURL %}
+{% url 'createGame' as createGameURL %}
+{% url 'registerOnGame' game.id as registerOnGameURL %}
 
 <main class="container container--mw700">
-  {% block content %}
-  {% endblock %}
+<!-- Navigation -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <a class="navbar-brand" href="{% if user.is_authenticated %}{{ profileURL }}{% else %}/{% endif %}"><img src="{% static 'images/favicon.png' %}">Первокиллер</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav comp-nav">
+        <li {% if currentUrl == rulesURL %} class="active" {% endif %}><a href="{{ rulesURL }}">Правила</a></li>
+        <li {% if currentUrl == nominationsURL %} class="active" {% endif %}><a href="{{ nominationsURL }}">Номинации</a></li>
+        <li {% if currentUrl == statisticsURL %} class="active" {% endif %}><a href="{{ statisticsURL }}">Статистика</a></li>
+      </ul>
+      <ul class="nav navbar-nav comp-nav1 navbar-right">
+        {% if user.is_authenticated %}
+        {% if user.is_staff %}
+        <li><a href="/admin"><span class="glyphicon glyphicon glyphicon-wrench"></span> База данных</a></li>
+        {% endif %}
+        <li><a data-toggle="modal" data-target="#myModal">Уведомления <span class="badge">0</span></a></li>
+        <li {% if currentUrl == profileURL %} class="active" {% endif %} ><a href="{{ profileURL }}"><span class="glyphicon glyphicon-user"></span>{{ user.username }}</a></li>
+        <li><a href="{{ logoutURL }}"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+        {% else %}
+        <li class="active"><a href="{{ loginURL }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
 
+{% if messages %}
+  {% for message in messages %}
+  <div id="alert-notification" class="alert alert-success alert-dismissable fade in"><span class="glyphicon glyphicon-exclamation-sign"></span> {{ message }}</li> </div>
+  {% endfor %}
+{% endif %}
+
+<!-- end navigation -->
+{% block content %}
+{% endblock %}
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-sm">
 
@@ -38,11 +85,20 @@
 
   </div>
 </div>
+<hr>
+<div class="panel panel-primary content">
+  <div class="panel-body">
+    <footer class="container-fluid text-center">
+      <p>Copyright © 2017 by <a href="https://vk.com/id13795993">Dmitry Aleksandrov.</a></p>
+      <p>All Rights Reserved.</p>
+    </footer>
+  </div>
+</div>
 </main>
 <script src="{% static 'utils/jquery.min.js' %}"></script>
 <script src="{% static 'utils/utils.js' %}"></script>
 <script data-pace-options='{ "ajax": false }' src="{% static 'pace.min.js' %}"></script>
-<script>$('#alert-failed').delay(3000).hide(500);</script>
+<script>$('#alert-notification').delay(3000).hide(500);</script>
 <script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 </body>
 </html>

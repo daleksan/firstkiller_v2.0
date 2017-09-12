@@ -2,38 +2,6 @@
 {% load staticfiles %}
   
 {% block content %}
-<!-- Navigation -->
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span> 
-      </button>
-      <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}/{% endif %}"><img src="{% static 'images/favicon.png' %}">Первокиллер</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav comp-nav">
-        <li><a href="{% url 'rules' %}">Правила</a></li>
-        <li><a href="{% url 'nominations' %}">Номинации</a></li>
-        <li><a href="{% url 'statistics' %}">Статистика</a></li>
-      </ul>
-      <ul class="nav navbar-nav comp-nav1 navbar-right">
-        {% if user.is_authenticated %}
-        {% if user.is_staff %}
-        <li><a href="/admin"><span class="glyphicon glyphicon glyphicon-wrench"></span> База данных</a></li>
-        {% endif %}
-        <li><a data-toggle="modal" data-target="#myModal" class="notifications">Уведомления <span class="badge">0</span></a></li>
-        <li class="active"><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span>{{ user.username }}</a></li>
-        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
-        {% else %}
-        <li class="active"><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-        {% endif %}
-      </ul>
-    </div>
-  </div>
-</nav>
 
 <!--content -->
 <div class="panel panel-primary content">
@@ -132,14 +100,6 @@
     </div>
     <!-- end of right column -->
   </div>
-</div>
-<div class="panel panel-primary content">
-      <div class="panel-body">
-<footer class="container-fluid text-center">
-  <p>Copyright © 2017 by <a href="https://vk.com/id13795993">Dmitry Aleksandrov.</a></p>
-  <p>All Rights Reserved.</p>
-</footer>
-</div>
 </div>
 </div>
 </div>
