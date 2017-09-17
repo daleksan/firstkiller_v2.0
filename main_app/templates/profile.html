@@ -9,8 +9,10 @@
       <div class="page-header">
         <h3>Добро пожаловать, Киллер!</h3>
       </div>
-      <h4>Регистрация открыта. </h4>
-      <div align="center"><img src="{% static 'images/afisha.jpg' %}" class="img-rounded" width="80%" height="80%"></div>
+      {% for game in games %}
+      <h4>{{ game.get_game_status }}</h4>
+      {% endfor %}
+      <div align="center"><img src="{% static 'images/afisha.jpg' %}" class="img-rounded" width="90%" height="80%"></div>
       <hr>
       <p>Удачи на игре!</p>
     </div>

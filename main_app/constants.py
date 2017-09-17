@@ -8,12 +8,16 @@ KILLER_STATUS_CHOICES = (
     (DEAD, u'Мертв'),
 )
 
-NEW = u'Новая'
-OLD = u'Закончилась'
-REGISTRATION = u'Идет Регистрация'
+NEW_GAME = u'Новая Игра'
+REGISTRATION_IN_PROGRESS = u'Идет Регистрация'
+REGISTRATION_END = u'Регистрация Завершена'
+GAME_BEGIN = u'Игра Началась'
+GAME_END = u'Игра Закончилась'
 
 GAME_STATUS_CHOICES = (
-	(NEW, u'Новая'),
-    (REGISTRATION, u'Идет Регистрация'),
-    (OLD, u'Закончилась'),
+    (NEW_GAME, u'Новая Игра'),
+    (REGISTRATION_IN_PROGRESS, u'Идет Регистрация'),
+    (REGISTRATION_END, u'Регистрация Завершена'),
+    (GAME_BEGIN, u'Игра Началась'),
+    (GAME_END, u'Игра Закончилась'),
 )

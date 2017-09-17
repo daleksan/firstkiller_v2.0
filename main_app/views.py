@@ -8,8 +8,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from datetime import date
 
 
-from .forms import LoginForm, RegistrationForm, CreateGameForm, RegisterOnGameForm
-
+from .forms import LoginForm, RegistrationForm, CreateGameForm, RegisterOnGameForm, ConfirmKillForm
+from .constants import *
 from .models import Game, User, Participants
 
 
@@ -21,10 +21,10 @@ def profileView(request):
     current_user = User.objects.get(username=request.user)
     currentUrl = request.get_full_path()
     games = Game.objects.all()
-    killer = Participants.objects.filter(user=current_user)
-    print currentUrl
-    if killer:
-        print 123
+    try:
+        killer = Participants.objects.get(user=current_user)
+    except Participants.DoesNotExist:
+        killer = None
     return render(request, 'profile.html', locals())
 
 
@@ -93,7 +93,10 @@ def createGameView(request):
     error_message = None
     currentUrl = request.get_full_path()
     games = Game.objects.all()
-    killer = Participants.objects.filter(user=request.user)
+    try:
+        killer = Participants.objects.get(user=request.user)
+    except Participants.DoesNotExist:
+        killer = None
     if request.method == 'POST':
         form = CreateGameForm(data=request.POST)
         if form.is_valid():
@@ -112,7 +115,10 @@ def manageGameView(request, game_id):
     # game_name = get_object_or_404(Game.objects, game_name=game_name)
     current_game = Game.objects.get(id=game_id)
     games = Game.objects.all()
-    killer = Participants.objects.filter(user=request.user)
+    try:
+        killer = Participants.objects.get(user=request.user)
+    except Participants.DoesNotExist:
+        killer = None
     return render(request, 'profile-manage-game.html', locals())
 
 
@@ -148,3 +154,37 @@ def registerOnGameView(request, game_id):
     else:
         form = RegisterOnGameForm()
     return render(request, 'profile-register-on-game.html', locals())
+
+
+def userStatisticsView(request):
+    currentUrl = request.get_full_path()
+    killer = Participants.objects.get(user=request.user)
+    games = Game.objects.all()
+    return render(request, 'profile-user-statistics.html', locals())
+
+
+def confirmKill(request):
+    currentUrl = request.get_full_path()
+    current_game = Game.objects.get(status=GAME_BEGIN)
+    killer = Participants.objects.get(participants=current_game, user=request.user)
+    games = Game.objects.all()
+    if request.method == "POST":
+        form = ConfirmKillForm(data=request.POST)
+        if form.is_valid():
+            input_victim_code = form.cleaned_data['victim_code']
+            victim = Participants.objects.get(participants=current_game, personal_code=input_victim_code)
+            if input_victim_code != killer.victim_code:
+                messages.error(request, 'Неправильный код жертвы!')
+                return HttpResponseRedirect('/kill/')
+            else:
+                killer.victim_code = victim.victim_code
+                kills = killer.kills + 1
+                killer.kills = kills
+                victim.status = DEAD
+                victim.save()
+                killer.save()
+            messages.success(request, 'Вы успешно зафиксировали убийство!')
+            return HttpResponseRedirect('/userStatistics/')
+    else:
+        form = ConfirmKillForm()
+    return render(request, 'profile-confirm-kill.html', locals())

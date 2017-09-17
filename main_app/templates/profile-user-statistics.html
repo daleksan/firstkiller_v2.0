@@ -14,9 +14,7 @@
       <div class="panel-body">
       <ul class="nav nav-pills nav-stacked">
         <li><a href="{% url 'profile' %}">Профиль</a></li>
-        {% if killer %}
-        <li><a href="{% url 'userStatistics' %}">Моя статистика</a></li>
-        {% endif %}
+        <li class="active"><a href="{% url 'userStatistics' %}">Моя статистика</a></li>
         <!-- Register On Game -->
         {% for game in games %}
         {% if game.get_game_status == 'Идет Регистрация' %}
@@ -28,14 +26,14 @@
         <!-- Confirm a kill -->
         {% if killer %}
         {% for game in games %}
-        <li {% if game.get_game_status != 'Игра Началась' or not killer.is_alive %} class="disabled" {% endif %}><a {% if killer.is_alive %} href="{% url 'confirmKill' %}" {% endif %}>Зафиксировать убийство</a></li>
+        <li {% if game.get_game_status != 'Игра Началась' or not killer.is_alive %}  class="disabled" {% endif %}><a {% if killer.is_alive %} href="{% url 'confirmKill' %}" {% endif %}>Зафиксировать убийство</a></li>
         {% endfor %}
         {% endif %}
         <!-- end of confirm a kill -->
 
         <!-- Create a Game -->
         {% if user.is_staff %}
-        <li class="active"><a href="{% url 'createGame' %}">Создать Игру</a></li>
+        <li><a href="{% url 'createGame' %}">Создать Игру</a></li>
         {% if games %}
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Управление играми
@@ -56,32 +54,54 @@
     </div>
     <!-- end of left column -->
     <!-- center -->
-    <div class="col-sm-6 text-left">
-    {% if error_message %}
-      <div id="alert-failed" class="alert alert-danger alert-dismissable fade in"><span class="glyphicon glyphicon-exclamation-sign"></span> {{ error_message }}</div>
-    {% endif %}
+    <div class="col-sm-6">
     <div class="panel panel-primary content">
       <div class="panel-body">
-      <form method="post" class="form-horizontal">
-      {% csrf_token %}
-      {% for field in form %}
-        <div class="form-group">
-          <label class="control-label col-sm-3" for="id_{{ field.name}}">{{ field.label }}:</label>
-          <div class="col-sm-8">
-          {{ field }}
-          {% for error in field.errors %}
-          <p class="bg-danger text-left" style="margin-top: 5px;color: #a94442"> <span class="glyphicon glyphicon-exclamation-sign" style="margin-left: 5px;"></span> {{ error }}</p>
-          {% endfor %}
-          </div>
+      <h2 class="panel-heading">«{{killer.get_game_name}}»</h2>
+        <div class="panel-group">
+            <div class="panel-primary content">
+                <div class="panel-body">
+                  <div class="media">
+                    <div class="media-left media-middle">
+                      <img src="{% static 'images/badge.png' %}" class="media-object img-rounded" style="width:80px">
+                    </div>
+                    <div class="media-body">
+                      <h3 class="media-heading">Кодовое имя:</h3>
+                      <h4>Киллер №{{ killer.id }}</h4>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <hr>
+            <div class="panel-primary content">
+              <div class="panel-body">
+                <div class="media">
+                  <div class="media-left media-middle">
+                    <img src="{% static 'images/status.png' %}" class="media-object img-rounded" style="width:80px">
+                  </div>
+                  <div class="media-body">
+                    <h3 class="media-heading">Статус:</h3>
+                    <h4 style="color:{% if killer.is_alive %}green;{% else %}red;{% endif %}">{{ killer.status }}</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="panel-primary content">
+                <div class="panel-body">
+                  <div class="media">
+                    <div class="media-left media-middle">
+                      <img src="{% static 'images/kills.png' %}" class="media-object img-rounded" style="width:80px">
+                    </div>
+                    <div class="media-body">
+                      <h3 class="media-heading">Количество убийств:</h3>
+                      <h4>{{ killer.kills }}</h4>
+                    </div>
+                  </div>
+                </div>
+            </div>
         </div>
-      {% endfor %}
-        <div class="form-group">
-          <div class="col-sm-offset-1">
-          <button type="submit" class="btn btn-primary">Создать игру</button>
-        </div>
-    </div>
-  </form>
-  </div>
+      </div>
     </div>
     </div>
     <!-- end of center -->

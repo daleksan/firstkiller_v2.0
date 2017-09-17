@@ -14,13 +14,9 @@
       <div class="panel-body">
       <ul class="nav nav-pills nav-stacked">
         <li><a href="{% url 'profile' %}">Профиль</a></li>
-        <!-- <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Статистика за игры
-          <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Первокиллер 2017</a></li>
-          </ul>
-        </li> -->
+        {% if killer %}
+        <li><a href="{% url 'userStatistics' %}">Моя статистика</a></li>
+        {% endif %}
         <!-- Register On Game -->
         {% for game in games %}
         {% if game.get_game_status == 'Идет Регистрация' %}
@@ -28,6 +24,14 @@
         {% endif %}
         {% endfor %}
         <!-- end of register on game -->
+
+        <!-- Confirm a kill -->
+        {% if killer %}
+        {% for game in games %}
+        <li {% if game.get_game_status != 'Игра Началась' or not killer.is_alive %} class="disabled" {% endif %}><a {% if killer.is_alive %} href="{% url 'confirmKill' %}" {% endif %}>Зафиксировать убийство</a></li>
+        {% endfor %}
+        {% endif %}
+        <!-- end of confirm a kill -->
 
         <!-- Create a Game -->
         {% if user.is_staff %}
@@ -87,7 +91,7 @@
       <img align="center" src="{% static 'images/user.jpg' %}" class="img-thumbnail" alt="user avatar" width="75%" height="75%">
       <h4>Общая информация</h4>
       <ul class="profile-details">
-      <li><div class="header"><span class="glyphicon glyphicon-info-sign"></span> Фамилия и Имя:</div><div class="body">{{ user.get_full_name }}</div></li>
+      <li><div class="header"><span class="glyphicon glyphicon-info-sign"></span> Имя и Фамилия:</div><div class="body">{{ user.get_full_name }}</div></li>
       <li><div class="header"><span class="glyphicon glyphicon-education"></span> Номер группы:</div><div class="body">{{ user.group_number }}</div></li>
       </ul>
       <h4>Контактная информация</h4>

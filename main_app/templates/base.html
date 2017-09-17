@@ -59,7 +59,7 @@
 
 {% if messages %}
   {% for message in messages %}
-  <div id="alert-notification" class="alert alert-success alert-dismissable fade in"><span class="glyphicon glyphicon-exclamation-sign"></span> {{ message }}</li> </div>
+  <div id="alert-notification" class="alert {{ message.tags }} alert-dismissable fade in"><span class="glyphicon glyphicon-exclamation-sign"></span> {{ message }}</li> </div>
   {% endfor %}
 {% endif %}
 

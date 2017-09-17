@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% url 'manageGame' game.id as manageGameURL %}
+<!-- {% url 'manageGame' game.id as manageGameURL %}
 {% url 'createGame' as createGameURL %}
-{% url 'registerOnGame' game.id as registerOnGameURL %}
+{% url 'registerOnGame' as registerOnGameURL %} -->
 
 {% block content %}
 <!--content -->
@@ -16,14 +16,25 @@
           <div class="panel panel-primary content">
             <div class="panel-body">
               <ul class="nav nav-pills nav-stacked">
-                <li {% if profileURL %} class="active" {% endif %}><a href="#">Профиль</a></li>
+                <li {% if profileURL %} class="active" {% endif %}><a href="{{ profileURL }}">Профиль</a></li>
+                {% if killer %}
+                <li><a href="{% url 'userStatistics' %}">Моя статистика</a></li>
+                {% endif %}
                 <!-- Register On Game -->
                 {% for game in games %}
                 {% if game.get_game_status == 'Идет Регистрация' %}
-                <li {% if killer %} class="disabled" {% else %}{% if registerOnGameURL %} class="active" {% endif %}{% endif %}><a {% if not killer %} href="{{ registerOnGameURL }}" {% endif %}>Регистрация на игру</a></li>
+                <li {% if killer %} class="disabled" {% elif currentURL == '/registerOnGame/{game.id}' %} class="active" {% endif %}><a {% if not killer %} href="{% url 'registerOnGame' game.id %}" {% endif %}>Регистрация на игру</a></li>
                 {% endif %}
                 {% endfor %}
                 <!-- end of register on game -->
+
+                <!-- Confirm a kill -->
+                {% if killer %}
+                {% for game in games %}
+                <li {% if game.get_game_status != 'Игра Началась' or not killer.is_alive %} class="disabled" {% endif %}><a {% if killer.is_alive %} href="{% url 'confirmKill' %}" {% endif %}>Зафиксировать убийство</a></li>
+                {% endfor %}
+                {% endif %}
+                <!-- end of confirm a kill -->
 
                 <!-- Create a Game -->
                 {% if user.is_staff %}
@@ -34,7 +45,7 @@
                   <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     {% for game in games %}
-                    <li><a href="{{ manageGameURL }}">{{ game.get_game_name }}</a></li>
+                    <li><a href="{% url 'manageGame' game.id %}">{{ game.get_game_name }}</a></li>
                     {% endfor %}
                   </ul>
                 </li>
@@ -57,7 +68,7 @@
               <img align="center" src="{% static 'images/user.jpg' %}" class="img-thumbnail" alt="user avatar" width="75%" height="75%">
               <h4>Общая информация</h4>
               <ul class="profile-details">
-                <li><div class="header"><span class="glyphicon glyphicon-info-sign"></span> Фамилия и Имя:</div><div class="body">{{ user.get_full_name }}</div></li>
+                <li><div class="header"><span class="glyphicon glyphicon-info-sign"></span> Имя и Фамилия:</div><div class="body">{{ user.get_full_name }}</div></li>
                 <li><div class="header"><span class="glyphicon glyphicon-education"></span> Номер группы:</div><div class="body">{{ user.group_number }}</div></li>
               </ul>
               <h4>Контактная информация</h4>

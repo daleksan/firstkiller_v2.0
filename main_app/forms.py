@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.forms import BaseInlineFormSet
 from .models import User, Game, Participants   # fill in custom user info then save it
 # from django.contrib.auth.forms import UserCreationForm
 from .admin import UserCreationForm
-
 
 
 class LoginForm(forms.Form):
@@ -56,9 +54,11 @@ class CreateGameForm(forms.ModelForm):
                                 help_text='Название',
                                 widget=forms.TextInput(attrs={'class': 'form-control',
                                                               'placeholder': u'Введите название игры'}))
+
     class Meta:
-      model = Game
-      fields = ('game_name',)
+        model = Game
+        fields = ('game_name',)
+
 
 class RegisterOnGameForm(forms.ModelForm):
     group_number = forms.CharField(label=u'Номер группы',
@@ -67,11 +67,20 @@ class RegisterOnGameForm(forms.ModelForm):
                                    help_text='Номер вашей группы.',
                                    widget=forms.TextInput(attrs={'class': 'form-control',
                                                                  'placeholder': u'Введите номер группы ("-" для преподавателей)'}))
-    photo = forms.ImageField(label = u'Фотография',
+    photo = forms.ImageField(label=u'Фотография',
                              required=True)
+
     class Meta:
         model = Participants
         fields = ('group_number', 'photo',)
 
 
+class ConfirmKillForm(forms.ModelForm):
+    victim_code = forms.CharField(label=u'Код',
+                                  help_text='Код вашей жертвы.',
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                 'placeholder': u'Введите код вашей жертвы'}))
 
+    class Meta:
+        model = Participants
+        fields = ('victim_code',)

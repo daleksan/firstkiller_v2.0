@@ -13,5 +13,7 @@ urlpatterns = [
     url(r'^profile/createGame/$', views.createGameView, name='createGame'),
     url(r'^manage/(\w+)/$', views.manageGameView, name='manageGame'),
     url(r'^startRegistration/$', views.startRegistrationRequest, name='startRegistration'),
-    url(r'^registerOnGame/(\w+)/$', views.registerOnGameView, name='registerOnGame'),
+    url(r'^registerOnGame/(?P<game_id>[0-9]+)$', views.registerOnGameView, name='registerOnGame'),
+    url(r'^userStatistics/$', views.userStatisticsView, name='userStatistics'),
+    url(r'^kill/$', views.confirmKill, name='confirmKill'),
 ]

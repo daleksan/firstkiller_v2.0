@@ -10,12 +10,13 @@ from random import randint
 import os
 
 from .managers import UserManager
-from .constants import KILLER_STATUS_CHOICES, ALIVE, DEAD, \
-                        GAME_STATUS_CHOICES, NEW
+from .constants import KILLER_STATUS_CHOICES, ALIVE, \
+                       GAME_STATUS_CHOICES, NEW_GAME
+
 
 def generate_code(n=6):
-    range_start = 10**(n-1)
-    range_end = (10**n)-1
+    range_start = 10**(n - 1)
+    range_end = (10**n) - 1
     return randint(range_start, range_end)
 
 
@@ -25,7 +26,7 @@ def directory_path(instance, filename):
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_('username'), max_length=40, blank=False, unique=True)
-    email = models.EmailField(_('email address'), unique=True ,blank=False)
+    email = models.EmailField(_('email address'), unique=True, blank=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=False)
     last_name = models.CharField(_('last name'), max_length=30, blank=False)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
@@ -86,7 +87,7 @@ class Game(models.Model):
     start_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     killers = models.IntegerField(default=0, blank=False)
-    status = models.CharField(max_length=24, choices=GAME_STATUS_CHOICES, default=NEW, unique=True)
+    status = models.CharField(max_length=24, choices=GAME_STATUS_CHOICES, default=NEW_GAME, unique=True)
 
     def get_game_status(self):
         return self.status
@@ -103,10 +104,12 @@ class Game(models.Model):
     def get_game_killers(self):
         return self.killers
 
+
 def get_file_name(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (instance.personal_code, ext)
     return os.path.join('game/', filename)
+
 
 class Participants(models.Model):
     user = models.OneToOneField(User, null=True, blank=True)
@@ -118,6 +121,7 @@ class Participants(models.Model):
     status = models.CharField(choices=KILLER_STATUS_CHOICES, max_length=5, default=ALIVE)
     personal_code = models.CharField(default=generate_code, blank=False, max_length=6, unique=True)
     victim_code = models.CharField(default=None, blank=True, null=True, max_length=6)
+    victim_mobile_phone = models.CharField(default=None, blank=True, null=True, max_length=40)
     kills = models.IntegerField(default=0)
 
     def get_game_name(self):
@@ -136,3 +140,8 @@ class Participants(models.Model):
     def get_kills(self):
         return self.kills
 
+    def is_alive(self):
+        if self.status == ALIVE:
+            return True
+        else:
+            return False

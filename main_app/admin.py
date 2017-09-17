@@ -88,18 +88,25 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('username',)
     filter_horizontal = ()
 
+
 class ParticipantsInline(admin.TabularInline):
     model = Participants
     extra = 0
+
 
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
     list_display = ('game_name', 'start_date', 'end_date', 'killers', 'status')
     inlines = [ParticipantsInline]
 
+
+@admin.register(Participants)
+class ParticipantsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'first_name', 'last_name', 'group_number', 'personal_code', 'victim_code')
+
+
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
-admin.site.register(Participants)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
