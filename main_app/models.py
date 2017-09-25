@@ -119,7 +119,7 @@ class Participants(models.Model):
     group_number = models.CharField(max_length=30, blank=False)
     photo = models.ImageField(upload_to=get_file_name)
     status = models.CharField(choices=KILLER_STATUS_CHOICES, max_length=5, default=ALIVE)
-    personal_code = models.CharField(default=generate_code, blank=False, max_length=6, unique=True)
+    personal_code = models.CharField(default=generate_code, blank=False, max_length=6)
     victim_code = models.CharField(default=None, blank=True, null=True, max_length=6)
     victim_mobile_phone = models.CharField(default=None, blank=True, null=True, max_length=40)
     kills = models.IntegerField(default=0)

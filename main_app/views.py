@@ -172,15 +172,31 @@ def confirmKill(request):
         form = ConfirmKillForm(data=request.POST)
         if form.is_valid():
             input_victim_code = form.cleaned_data['victim_code']
-            victim = Participants.objects.get(participants=current_game, personal_code=input_victim_code)
+            try:
+                victim = Participants.objects.get(participants=current_game, personal_code=input_victim_code)
+            except Participants.DoesNotExist:
+                victim = None
             if input_victim_code != killer.victim_code:
                 messages.error(request, 'Неправильный код жертвы!')
                 return HttpResponseRedirect('/kill/')
             else:
+
+                try:
+                    killervictim = Participants.objects.get(participants=current_game, victim_code=killer.personal_code)
+                except Participants.DoesNotExist:
+                    killervictim = None
                 killer.victim_code = victim.victim_code
+                killer.personal_code = victim.personal_code
+                killervictim.victim_code = killer.personal_code
+
+                victim.victim_code = 'dead'
+                victim.personal_code = 'dead'
+
                 kills = killer.kills + 1
                 killer.kills = kills
                 victim.status = DEAD
+
+                killervictim.save()
                 victim.save()
                 killer.save()
             messages.success(request, 'Вы успешно зафиксировали убийство!')
